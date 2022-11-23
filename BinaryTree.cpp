@@ -55,7 +55,7 @@ Node* BinaryTree::deleteNode(Node* rootPtr, const int data_)
 {
     if (rootPtr == nullptr)
     {
-        throw invalid_argument("Узел не найден!");
+        throw invalid_argument("РЈР·РµР» РЅРµ РЅР°Р№РґРµРЅ!");
     }
     else if (data_ < rootPtr->data)
     {
