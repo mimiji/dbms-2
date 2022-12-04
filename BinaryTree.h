@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include<iostream>
 #include"Node.h"
 
 using namespace std;
@@ -20,7 +19,7 @@ class BinaryTree
 private:
 
     /**
-    * \*brief Корень деерва.
+    * \*brief Корень дерева.
     */
     Node* root;
 
@@ -29,13 +28,6 @@ private:
     * \param rootPtr - указатель на узел
     */
     void deleteTree(Node* rootPtr);
-
-    /**
-     * \brief Вставка узла
-     * \param rootPtr - указатель на узел, new_data - переменная с данными
-     * \return rootPtr - указатель на узел
-     */
-    Node* insertNode(Node* rootPtr, const int new_data) noexcept;
 
     /**
     * \brief Функция,помогающая получить предшественника по порядку для удаления узла из дерева
@@ -58,12 +50,15 @@ private:
     void invertBinaryTree(Node* root) const noexcept;
 
     /**
-     * \brief Функция для обхода заданного бинарного дерева в прямом порядке
-     * \param root - корень дерева
+     * \brief Вставка узла
+     * \param rootPtr - указатель на узел, new_data - переменная с данными
+     * \return rootPtr - указатель на узел
      */
-    void preOrder(Node* root) const;
+    Node* insertNode(const int new_data, Node* t) noexcept;
+
 
 public:
+
     /**
     * \brief Конструктор по умолчанию
     */
@@ -75,9 +70,62 @@ public:
     ~BinaryTree() noexcept;
 
     /**
+     * \brief Конструктор копирования
+     */
+    BinaryTree(const BinaryTree& other) noexcept;
+
+    /**
+     * \brief Оператор копирования
+     */
+    BinaryTree& operator=(const BinaryTree& other) noexcept;
+
+    /**
+     * \brief Конструктор перемещения
+     */
+    BinaryTree(BinaryTree&& other) noexcept;
+
+    /**
+     * \brief Оператор перещения
+     */
+    BinaryTree& operator=(BinaryTree&& other) noexcept;
+
+    /**
+     * \brief Геттер для корня дерева
+     * \return root - корень дерева
+     */
+    Node* get_root()
+    {
+        return root;
+    }
+
+    /**
      * \brief Метод find проверяет, содержится ли в дереве элемент со значением key
      * \param key - ключ
      * \return возвращает true или false
      */
     bool findElement(const int key) const noexcept;
+
+    /**
+     * \brief Вставка узла (функция в области public)
+     * \param new_data - переменная с данными
+     */
+    void insert(const int new_data) noexcept;
+
+    /**
+     * \brief Удаление узла (функция в области public)
+     * \param new_data - переменная с данными
+     */
+    void remove(const int new_data) noexcept;
+
+    /**
+     * \brief Поворот дерева (функция в области public)
+     */
+    void invert() noexcept;
+
+    /**
+    * \brief Оператор сдвига дерева в стандартный поток ввода-вывода.
+    * \param out Cтандартный поток ввода-вывода.
+    * \param tree Дерево.
+    */
+    friend std::ostream& operator<<(ostream& out, BinaryTree const& tree);
 };

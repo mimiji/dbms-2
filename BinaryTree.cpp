@@ -7,8 +7,63 @@
 
 #include "BinaryTree.h"
 
-BinaryTree::BinaryTree() noexcept : root(nullptr)
-{}
+BinaryTree::BinaryTree() noexcept : root(nullptr) {}
+
+BinaryTree::BinaryTree(const BinaryTree& other) noexcept : root(nullptr)
+{
+    std::vector<Node *> remaining;
+    Node * current = other.root;
+    while (current != nullptr)
+    {
+        insert(current->data);
+        if (current->right != nullptr)
+        {
+            remaining.push_back(current->right);
+        }
+        if (current->left != nullptr)
+        {
+            current = current->left;
+        }
+        else if (remaining.empty())
+        {
+            break;
+        }
+        else 
+        {
+            current = remaining.back();
+            remaining.pop_back();
+        }
+    }
+}
+
+BinaryTree& BinaryTree::operator=(const BinaryTree& other) noexcept
+{
+    if (this == &other)
+        return *this;
+
+    BinaryTree copy(other);
+    std::swap(root, copy.root);
+
+    return *this;
+}
+
+BinaryTree::BinaryTree(BinaryTree&& other) noexcept
+{
+    if (this == &other)
+        return;
+
+    other.root = nullptr;
+}
+
+BinaryTree& BinaryTree::operator=(BinaryTree&& other) noexcept
+{
+    if (this == &other)
+        return *this;
+
+    std::swap(root, other.root);
+
+    return *this;
+}
 
 BinaryTree::~BinaryTree() noexcept
 {
@@ -17,7 +72,7 @@ BinaryTree::~BinaryTree() noexcept
 
 void BinaryTree::deleteTree(Node* rootPtr)
 {
-    if (rootPtr)
+    if (rootPtr != nullptr)
     {
         deleteTree(rootPtr->left);
         deleteTree(rootPtr->right);
@@ -25,19 +80,19 @@ void BinaryTree::deleteTree(Node* rootPtr)
     }
 }
 
-Node* BinaryTree::insertNode(Node* rootPtr, const int new_data) noexcept
+Node* BinaryTree::insertNode(const int new_data, Node * rootPtr) noexcept
 {
     if (rootPtr == nullptr)
     {
-        Node* newNode = new Node(new_data);
+        rootPtr = new Node(new_data);
     }
     if (new_data < rootPtr->data)
     {
-        rootPtr->left = insertNode(rootPtr->left, new_data);
+        rootPtr->left = insertNode(new_data, rootPtr->left);
     }
-    if (new_data > rootPtr->data)
+    else if (new_data > rootPtr->data)
     {
-        rootPtr->right = insertNode(rootPtr->right, new_data);
+        rootPtr->right = insertNode(new_data, rootPtr->right);
     }
     return rootPtr;
 }
@@ -97,15 +152,19 @@ Node* BinaryTree::deleteNode(Node* rootPtr, const int data_)
 
 bool BinaryTree::findElement(const int key) const noexcept
 {
-    Node* curr = root;
-    while (curr && curr->data != key)
+    Node* current = root;
+    if (current != nullptr)
     {
-        if (curr->data > key)
-            curr = curr->left;
-        else
-            curr = curr->right;
+        while (current && current->data != key)
+        {
+            if (current->data > key)
+                current = current->left;
+            else
+                current = current->right;
+        }
     }
-    return curr != NULL;
+
+    return current != nullptr;
 }
 
 void BinaryTree::invertBinaryTree(Node* root) const noexcept
@@ -121,12 +180,45 @@ void BinaryTree::invertBinaryTree(Node* root) const noexcept
     invertBinaryTree(root->right);
 }
 
-void BinaryTree::preOrder(Node* root)  const
+void BinaryTree::insert(const int new_data) noexcept
 {
-    if (root != nullptr)
+    root = insertNode(new_data, root);
+}
+
+void BinaryTree::remove(const int new_data) noexcept
+{
+    root = deleteNode(root, new_data);
+}
+
+void BinaryTree::invert() noexcept
+{
+    invertBinaryTree(root);
+}
+
+std::ostream& operator<<(ostream& out, BinaryTree const& tree)
+{
+    std::vector<Node*> remaining;
+    Node* current = tree.root;
+    while (current != nullptr)
     {
-        cout << root->data << "\t";
-        preOrder(root->left);
-        preOrder(root->right);
+        out << current->get_data() << ' ';
+        if (current->get_right())
+        {
+            remaining.push_back(current->get_right());
+        }
+        if (current->get_left())
+        {
+            current = current->get_left();
+        }
+        else if (remaining.empty())
+        {
+            break;
+        }
+        else
+        {
+            current = remaining.back();
+            remaining.pop_back();
+        }
     }
+    return out;
 }

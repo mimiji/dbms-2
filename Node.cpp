@@ -27,3 +27,18 @@ Node::~Node()
     this->left = nullptr;
     this->right = nullptr;
 }
+
+int Node::get_data()
+{
+    return data;
+}
+
+Node* Node::get_left()
+{
+    return left;
+}
+
+Node* Node::get_right()
+{
+    return right;
+}

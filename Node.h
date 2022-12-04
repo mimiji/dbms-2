@@ -6,6 +6,11 @@
  *********************************************************************/
 #pragma once
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+
 /**
 * \brief Узел дерева.
 */
@@ -42,4 +47,22 @@ public:
     * \brief Деструктор
     */
     ~Node() noexcept;
+
+    /**
+      * \brief Геттер для переменной data
+      * \return data - данные
+      */
+    int get_data();
+
+    /**
+      * \brief Геттер для указателя left
+      * \return data - данные
+      */
+    Node* get_left();
+
+    /**
+      * \brief Геттер для указателя right
+      * \return data - данные
+      */
+    Node* get_right();
 };
